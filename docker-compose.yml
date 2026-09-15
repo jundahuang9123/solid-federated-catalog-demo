@@ -1,0 +1,72 @@
+name: solid-catalog-demo
+services:
+  catalog:
+    build: ./catalog
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      CATALOG_DEPLOYMENT: production
+      CATALOG_MODE: solid
+      FUSEKI_URL: http://fuseki:3030/solid
+      FUSEKI_USER: admin
+      FUSEKI_PASSWORD: ${FUSEKI_PASSWORD:?Set a strong Fuseki password}
+      SOLID_AUTH_MODE: oidc
+      SOLID_AUTH_REQUIRE_DPOP: "true"
+      SOLID_OIDC_ISSUER: ${SOLID_OIDC_ISSUER:?Set the trusted TMDT issuer}
+      SOLID_OIDC_AUDIENCE: ${SOLID_OIDC_AUDIENCE:-solid}
+      SOLID_REGISTRY_URL: ${SOLID_REGISTRY_URL:?Set the external registry URL}
+      CATALOG_PUBLIC_URL: https://${CATALOG_HOST:?Set the catalog hostname}
+      CATALOG_CORS_ORIGINS: https://${PUBLISHER_HOST:?Set the publisher hostname}
+    command: ["uvicorn", "core.app:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips=*", "--workers", "1", "--limit-concurrency", "32"]
+    depends_on:
+      fuseki:
+        condition: service_healthy
+    networks: [edge, index]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/ready', timeout=25)"]
+      interval: 30s
+      timeout: 30s
+      start_period: 90s
+      retries: 3
+  fuseki:
+    image: ${FUSEKI_IMAGE:-stain/jena-fuseki:5.1.0}
+    restart: unless-stopped
+    environment:
+      ADMIN_PASSWORD: ${FUSEKI_PASSWORD:?Set a strong Fuseki password}
+      JAVA_OPTIONS: -Xmx1g
+    volumes:
+      - fuseki-data:/fuseki
+      - ./deploy/fuseki.ttl:/fuseki/config.ttl:ro
+    networks: [index]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -u admin:$$ADMIN_PASSWORD --data-urlencode 'query=ASK {}' http://localhost:3030/solid/query > /dev/null"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 12
+  reverse-proxy:
+    build:
+      context: .
+      dockerfile: deploy/proxy.Dockerfile
+      args:
+        VITE_CENTRAL_CATALOG_URL: https://${CATALOG_HOST:?Set the catalog hostname}/catalog
+        VITE_DEFAULT_IDP: ${SOLID_OIDC_ISSUER:?Set the trusted TMDT issuer}
+    restart: unless-stopped
+    environment:
+      CATALOG_HOST: ${CATALOG_HOST:?Set the catalog hostname}
+      PUBLISHER_HOST: ${PUBLISHER_HOST:?Set the publisher hostname}
+      ACME_EMAIL: ${ACME_EMAIL:?Set the TLS certificate contact email}
+    ports: ["80:80", "443:443"]
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [edge]
+    depends_on: [catalog]
+networks:
+  edge:
+  index:
+    internal: true
+volumes:
+  fuseki-data:
+  caddy-data:
+  caddy-config:

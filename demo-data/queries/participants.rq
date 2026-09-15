@@ -1,0 +1,4 @@
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+SELECT DISTINCT ?graph WHERE {
+  GRAPH ?graph { ?dataset a dcat:Dataset }
+}

@@ -1,0 +1,8 @@
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+SELECT ?graph ?dataset ?title WHERE {
+  GRAPH ?graph {
+    ?dataset a dcat:Dataset .
+    OPTIONAL { ?dataset dct:title ?title }
+  }
+} ORDER BY ?title

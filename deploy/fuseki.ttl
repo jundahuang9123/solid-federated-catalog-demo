@@ -1,0 +1,14 @@
+@prefix fuseki: <http://jena.apache.org/fuseki#> .
+@prefix tdb2: <http://jena.apache.org/2016/tdb#> .
+@prefix ja: <http://jena.hpl.hp.com/2005/11/Assembler#> .
+
+<#service> a fuseki:Service ;
+    fuseki:name "solid" ;
+    fuseki:serviceQuery "query" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:dataset <#dataset> .
+
+<#dataset> a tdb2:DatasetTDB2 ;
+    tdb2:location "/fuseki/databases/solid" ;
+    ja:context [ ja:cxtName "arq:queryTimeout" ; ja:cxtValue "10000,10000" ] .
+# No SPARQL Update endpoint is configured. PUT /data is internal-only.

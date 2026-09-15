@@ -1,0 +1,13 @@
+PREFIX cx: <https://w3id.org/construct-dcat#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX ifc: <https://standards.buildingsmart.org/IFC/DEV/IFC4_3/OWL#>
+SELECT ?graph ?dataset ?title ?representation WHERE {
+  GRAPH ?graph {
+    ?dataset a dcat:Dataset ;
+             a ?representation ;
+             cx:describesAssetType ifc:IfcWall ;
+             dct:title ?title .
+    VALUES ?representation { cx:BIMDataset cx:AASDataset }
+  }
+}

@@ -1,0 +1,28 @@
+@prefix cx: <https://w3id.org/construct-dcat#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix ifc: <https://standards.buildingsmart.org/IFC/DEV/IFC4_3/OWL#> .
+@prefix bot: <https://w3id.org/bot#> .
+@prefix ex: <https://example.org/live-demo/> .
+
+ex:a-catalog a dcat:Catalog ;
+  dcat:contactPoint ex:a-contact ;
+  dcat:dataset ex:a-frame, ex:a-panels .
+
+ex:a-frame a dcat:Dataset, cx:BIMDataset ;
+  dct:title "Frame export — revision 2"@en ;
+  cx:describesAssetType ifc:IfcWall ;
+  cx:usesOntology bot: ;
+  dcat:distribution ex:a-frame-distribution .
+ex:a-frame-distribution a dcat:Distribution ;
+  dcat:downloadURL <https://example.org/live-demo/files/a-frame> ;
+  dcat:mediaType "model/step" .
+
+ex:a-panels a dcat:Dataset, cx:BIMDataset ;
+  dct:title "Envelope package"@en ;
+  cx:describesAssetType ifc:IfcWall ;
+  cx:usesOntology bot: ;
+  dcat:distribution ex:a-panels-distribution .
+ex:a-panels-distribution a dcat:Distribution ;
+  dcat:downloadURL <https://example.org/live-demo/files/a-panels> ;
+  dcat:mediaType "model/step" .

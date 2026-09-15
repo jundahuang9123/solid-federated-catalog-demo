@@ -1,0 +1,28 @@
+@prefix cx: <https://w3id.org/construct-dcat#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix ifc: <https://standards.buildingsmart.org/IFC/DEV/IFC4_3/OWL#> .
+@prefix bot: <https://w3id.org/bot#> .
+@prefix ex: <https://example.org/live-demo/> .
+
+ex:a-catalog a dcat:Catalog ;
+  dcat:contactPoint ex:a-contact ;
+  dcat:dataset ex:a-frame, ex:a-slabs .
+
+ex:a-frame a dcat:Dataset, cx:BIMDataset ;
+  dct:title "Frame export — revision 1"@en ;
+  cx:describesAssetType ifc:IfcWall ;
+  cx:usesOntology bot: ;
+  dcat:distribution ex:a-frame-distribution .
+ex:a-frame-distribution a dcat:Distribution ;
+  dcat:downloadURL <https://example.org/live-demo/files/a-frame> ;
+  dcat:mediaType "model/step" .
+
+ex:a-slabs a dcat:Dataset, cx:BIMDataset ;
+  dct:title "Floor package"@en ;
+  cx:describesAssetType ifc:IfcSlab ;
+  cx:usesOntology bot: ;
+  dcat:distribution ex:a-slabs-distribution .
+ex:a-slabs-distribution a dcat:Distribution ;
+  dcat:downloadURL <https://example.org/live-demo/files/a-slabs> ;
+  dcat:mediaType "model/step" .

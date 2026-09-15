@@ -1,0 +1,35 @@
+# Standalone, disposable test stack. Never use this file on a public interface.
+services:
+  catalog:
+    build: ./catalog
+    environment:
+      CATALOG_MODE: solid
+      FUSEKI_URL: http://fuseki:3030/solid
+      FUSEKI_PASSWORD: integration-only
+      SOLID_AUTH_MODE: trusted-header
+      SOLID_REGISTRY_URL: http://registry:8080/registry/
+      SOLID_REGISTRY_CACHE_TTL_SECONDS: "0"
+    ports: ["127.0.0.1::8000"]
+    depends_on:
+      fuseki:
+        condition: service_healthy
+      registry:
+        condition: service_started
+  fuseki:
+    image: stain/jena-fuseki:5.1.0
+    environment:
+      ADMIN_PASSWORD: integration-only
+    volumes:
+      - test-index:/fuseki
+      - ./deploy/fuseki.ttl:/fuseki/config.ttl:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -u admin:$$ADMIN_PASSWORD --data-urlencode 'query=ASK {}' http://localhost:3030/solid/query > /dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  registry:
+    image: python:3.11-alpine
+    command: ["python", "/fixture.py"]
+    volumes: ["./deploy/registry_fixture.py:/fixture.py:ro"]
+volumes:
+  test-index:

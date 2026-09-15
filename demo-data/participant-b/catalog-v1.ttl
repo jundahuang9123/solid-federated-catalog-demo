@@ -1,0 +1,20 @@
+@prefix cx: <https://w3id.org/construct-dcat#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix ifc: <https://standards.buildingsmart.org/IFC/DEV/IFC4_3/OWL#> .
+@prefix bot: <https://w3id.org/bot#> .
+@prefix ex: <https://example.org/live-demo/> .
+
+ex:b-catalog a dcat:Catalog ;
+  dcat:contactPoint ex:b-contact ;
+  dcat:dataset ex:b-components .
+
+ex:b-components a dcat:Dataset, cx:AASDataset ;
+  dct:title "Component passport set"@en ;
+  cx:describesAssetType ifc:IfcWall ;
+  cx:usesOntology bot: ;
+  dcat:distribution ex:b-components-distribution .
+ex:b-components-distribution a dcat:Distribution ;
+  dcat:downloadURL <https://example.org/live-demo/files/b-components> ;
+  dcat:mediaType "application/json" .
+ex:b-components cx:hasAASSubmodel ex:b-components-submodel .

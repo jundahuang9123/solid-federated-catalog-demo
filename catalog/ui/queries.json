@@ -1,0 +1,6 @@
+{
+  "All datasets": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nSELECT ?graph ?dataset ?title WHERE {\n  GRAPH ?graph {\n    ?dataset a dcat:Dataset .\n    OPTIONAL { ?dataset dct:title ?title }\n  }\n} ORDER BY ?title",
+  "Participants": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nSELECT DISTINCT ?graph WHERE {\n  GRAPH ?graph { ?dataset a dcat:Dataset }\n}",
+  "Construction: wall datasets across representations": "PREFIX cx: <https://w3id.org/construct-dcat#>\nPREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX ifc: <https://standards.buildingsmart.org/IFC/DEV/IFC4_3/OWL#>\nSELECT ?graph ?dataset ?title ?representation WHERE {\n  GRAPH ?graph {\n    ?dataset a dcat:Dataset ;\n             a ?representation ;\n             cx:describesAssetType ifc:IfcWall ;\n             dct:title ?title .\n    VALUES ?representation { cx:BIMDataset cx:AASDataset }\n  }\n}",
+  "Any published datasets?": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nASK { GRAPH ?graph { ?dataset a dcat:Dataset } }"
+}

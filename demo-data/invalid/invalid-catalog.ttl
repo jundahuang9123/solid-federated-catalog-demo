@@ -1,0 +1,9 @@
+@prefix cx: <https://w3id.org/construct-dcat#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix ifc: <https://standards.buildingsmart.org/IFC/DEV/IFC4_3/OWL#> .
+@prefix bot: <https://w3id.org/bot#> .
+@prefix ex: <https://example.org/live-demo/> .
+
+ex:invalid a dcat:Catalog ; dcat:contactPoint ex:a-contact ; dcat:dataset ex:broken .
+ex:broken a dcat:Dataset ; dct:title "Missing distribution" .
