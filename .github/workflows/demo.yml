@@ -39,4 +39,5 @@ jobs:
         run: |
           docker build -f deploy/proxy.Dockerfile --build-arg VITE_CENTRAL_CATALOG_URL=https://catalog.example.org/catalog --build-arg VITE_DEFAULT_IDP=https://issuer.example.org -t demo-proxy .
           docker run --rm -e CATALOG_HOST=catalog.example.org -e PUBLISHER_HOST=publisher.example.org -e ACME_EMAIL=test@example.org demo-proxy caddy validate --config /etc/caddy/Caddyfile
-          docker compose --env-file .env.example config --no-env-resolution --quiet
+          cp .env.example .env
+          docker compose config --quiet

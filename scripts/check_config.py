@@ -4,6 +4,10 @@ from pathlib import Path
 import re
 import sys
 
+if not Path('.env').is_file():
+    print('Create .env first: copy .env.example to .env, then fill in your server and TMDT settings.')
+    sys.exit(2)
+
 values = {}
 for line in Path('.env').read_text().splitlines():
     if line.strip() and not line.lstrip().startswith('#') and '=' in line:
