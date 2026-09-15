@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -e './catalog[dev]'
+      - run: pip install -c catalog/constraints.txt -e './catalog[dev]'
       - run: pytest -q
         working-directory: catalog
   publisher:
@@ -35,3 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 scripts/integration_test.py
+      - name: Build and validate production proxy
+        run: |
+          docker build -f deploy/proxy.Dockerfile --build-arg VITE_CENTRAL_CATALOG_URL=https://catalog.example.org/catalog --build-arg VITE_DEFAULT_IDP=https://issuer.example.org -t demo-proxy .
+          docker run --rm -e CATALOG_HOST=catalog.example.org -e PUBLISHER_HOST=publisher.example.org -e ACME_EMAIL=test@example.org demo-proxy caddy validate --config /etc/caddy/Caddyfile
+          docker compose --env-file .env.example config --no-env-resolution --quiet

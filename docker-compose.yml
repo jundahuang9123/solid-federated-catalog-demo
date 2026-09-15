@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
     environment:
       ADMIN_PASSWORD: ${FUSEKI_PASSWORD:?Set a strong Fuseki password}
-      JAVA_OPTIONS: -Xmx1g
+      JVM_ARGS: -Xmx1g
     volumes:
       - fuseki-data:/fuseki
       - ./deploy/fuseki.ttl:/fuseki/config.ttl:ro

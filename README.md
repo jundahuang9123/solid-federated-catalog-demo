@@ -41,7 +41,7 @@ Keep passwords and private keys outside Git and chat. [DEPLOYMENT.md](docs/DEPLO
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install -e './catalog[dev]'
+.venv/bin/pip install -c catalog/constraints.txt -e './catalog[dev]'
 (cd catalog && ../.venv/bin/pytest -q)
 (cd publisher && npm ci && npm test && npm run build && npm run lint)
 # Requires a running Docker engine; uses an isolated disposable test project:

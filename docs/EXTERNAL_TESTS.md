@@ -28,6 +28,6 @@ Fill in non-secret operational values:
 - [ ] Invalid fixture receives 422 at validation stage; previous snapshot survives.
 - [ ] A update removes old triples; B remains unchanged; Construct-DCAT query changes as documented.
 - [ ] Server/container recreation retains Fuseki data; `/ready` recovers.
-- [ ] Authentication-library dependency advisories reviewed/resolved before a public demonstration (see AUDIT.md).
+- [ ] Repeat dependency audit before the public demonstration (the preparation-time npm audit reports zero advisories; see AUDIT.md).
 
 For repeatable local integration, run `python3 scripts/integration_test.py`; it does not prove any box involving TMDT or HTTPS. If the provider issues opaque tokens or uses incompatible token claims/nonce behavior, record the actual mismatch and adapt the verifier/publisher with tests before proceeding.

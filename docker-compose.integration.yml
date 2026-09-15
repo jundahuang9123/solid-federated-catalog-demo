@@ -19,6 +19,7 @@ services:
     image: stain/jena-fuseki:5.1.0
     environment:
       ADMIN_PASSWORD: integration-only
+      JVM_ARGS: -Xmx1g
     volumes:
       - test-index:/fuseki
       - ./deploy/fuseki.ttl:/fuseki/config.ttl:ro

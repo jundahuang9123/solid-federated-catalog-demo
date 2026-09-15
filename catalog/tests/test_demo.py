@@ -138,3 +138,21 @@ def test_failed_put_does_not_send_delete():
     with pytest.raises(RuntimeError):
         client.replace_named_graph('urn:catalog:a', '<urn:s> <urn:p> <urn:o> .')
     assert calls == ['PUT']
+
+
+@pytest.mark.parametrize('kind,expected', [('timeout', 504), ('network', 502), ('oversize', 502), ('syntax', 400)])
+def test_query_backend_failures_are_controlled(system, monkeypatch, kind, expected):
+    client, _, _ = system
+    def fail(*args, **kwargs):
+        if kind == 'timeout':
+            raise httpx.ReadTimeout('timeout')
+        if kind == 'network':
+            raise httpx.ConnectError('unavailable')
+        if kind == 'syntax':
+            response = httpx.Response(400, request=httpx.Request('POST', 'http://index/query'))
+            response.raise_for_status()
+        raise ValueError('Response limit exceeded')
+    monkeypatch.setattr(FusekiClient, 'query_results', fail)
+    assert client.post('/sparql', json={'query': 'ASK {}'}).status_code == expected
+    # A failed query releases its concurrency slot for another request.
+    assert client.post('/sparql', json={'query': 'ASK {}'}).status_code == expected
