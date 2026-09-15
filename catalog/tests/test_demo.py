@@ -1,5 +1,4 @@
 """Real RDF queries behind the real HTTP client, with an in-memory index transport."""
-import json
 from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import parse_qs

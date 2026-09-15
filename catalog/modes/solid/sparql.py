@@ -7,10 +7,10 @@ import threading
 
 import httpx
 from fastapi import APIRouter, HTTPException, Request
+from pyparsing import ParseResults
 from rdflib.plugins.sparql.algebra import translateQuery
 from rdflib.plugins.sparql.parser import parseQuery
 from rdflib.plugins.sparql.parserutils import CompValue
-from pyparsing import ParseResults
 from starlette.concurrency import run_in_threadpool
 
 

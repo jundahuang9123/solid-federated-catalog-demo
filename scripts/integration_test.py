@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Owns an isolated Compose project; destroys ONLY that project's test volume."""
 import json
+from http.client import RemoteDisconnected
 from pathlib import Path
 import subprocess
 import time
@@ -42,7 +43,7 @@ def wait_ready():
         try:
             if request('/ready')[0] == 200:
                 return
-        except (URLError, TimeoutError):
+        except (URLError, TimeoutError, ConnectionError, RemoteDisconnected):
             pass
         time.sleep(2)
     raise RuntimeError('Catalog did not become ready')

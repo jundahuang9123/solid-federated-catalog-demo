@@ -1,6 +1,5 @@
 import base64
 import hashlib
-import json
 import time
 
 import jwt
@@ -11,8 +10,8 @@ from fastapi.testclient import TestClient
 from core.shared.shacl_validate import ShaclValidationGate
 from modes.solid.auth import OidcSolidAuth, jwk_thumbprint
 from modes.solid.ingest import SolidIngest
-from tests.fixtures import FakeRegistry, MemoryCatalogStore, VALID_TURTLE
-from tests.test_solid_auth import ISSUER, REGISTERED_WEBID, _private_key, _public_jwk, _oidc_client
+from tests.fixtures import VALID_TURTLE, FakeRegistry, MemoryCatalogStore
+from tests.test_solid_auth import ISSUER, REGISTERED_WEBID, _oidc_client, _private_key, _public_jwk
 
 
 def make_request(token_changes=None, proof_changes=None, header_changes=None):
